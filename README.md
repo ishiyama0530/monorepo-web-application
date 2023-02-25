@@ -1,6 +1,7 @@
 # simple-ticket-system
 
 ※ 最初に zenn のことを書く
+※ TEST
 
 ## 🔰 はじめかた
 
