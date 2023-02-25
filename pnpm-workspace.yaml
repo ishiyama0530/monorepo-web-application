@@ -7,3 +7,7 @@ packages:
   - 'packages/modules/ticket'
   - 'packages/modules/user'
   - '!**/test/**'
+
+  - 'packages/services/ticket'
+  - 'packages/services/user'
+  - 'packages/cli/stafftool'
