@@ -1,0 +1,9 @@
+packages:
+  - 'packages/app'
+  - 'packages/web'
+  - 'packages/web.admin'
+  - 'packages/specs'
+  - 'packages/modules/common'
+  - 'packages/modules/ticket'
+  - 'packages/modules/user'
+  - '!**/test/**'

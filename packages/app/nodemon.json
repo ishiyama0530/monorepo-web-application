@@ -1,0 +1,6 @@
+{
+  "memo1": "'--files' -> https://zenn.dev/ryo_kawamata/articles/ts-node-my-types",
+  "exec": "ts-node --files app.ts",
+  "watch": ["src", "../modules"],
+  "ext": "ts"
+}

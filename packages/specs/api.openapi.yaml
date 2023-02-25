@@ -1,0 +1,566 @@
+components:
+    examples: {}
+    headers: {}
+    parameters: {}
+    requestBodies: {}
+    responses: {}
+    schemas:
+        Error4xx:
+            properties:
+                message:
+                    type: string
+            required:
+                - message
+            type: object
+            additionalProperties: false
+        Error5xx:
+            properties:
+                message:
+                    type: string
+            required:
+                - message
+            type: object
+            additionalProperties: false
+        UserRole:
+            type: string
+            enum:
+                - administrator
+                - member
+        UserEntity:
+            properties:
+                userId:
+                    type: string
+                email:
+                    type: string
+                name:
+                    type: string
+                role:
+                    $ref: '#/components/schemas/UserRole'
+            required:
+                - userId
+                - email
+                - name
+                - role
+            type: object
+            additionalProperties: false
+        TicketDto:
+            properties:
+                ticketId:
+                    type: string
+                title:
+                    type: string
+                body:
+                    type: string
+                authorUserId:
+                    type: string
+                assignedUserId:
+                    type: string
+                authorUserName:
+                    type: string
+                assignedUserName:
+                    type: string
+            required:
+                - ticketId
+                - title
+                - body
+                - authorUserId
+                - assignedUserId
+                - authorUserName
+                - assignedUserName
+            type: object
+            additionalProperties: false
+        Pick_TicketEntity.Exclude_keyofTicketEntity.ticketId__:
+            properties:
+                title:
+                    type: string
+                body:
+                    type: string
+                authorUserId:
+                    type: string
+                assignedUserId:
+                    type: string
+            required:
+                - title
+                - body
+                - authorUserId
+                - assignedUserId
+            type: object
+            description: 'From T, pick a set of properties whose keys are in the union K'
+        Omit_TicketEntity.ticketId_:
+            $ref: '#/components/schemas/Pick_TicketEntity.Exclude_keyofTicketEntity.ticketId__'
+            description: 'Construct a type with the properties of T except for those in type K.'
+        TicketCreateServiceInputData:
+            $ref: '#/components/schemas/Omit_TicketEntity.ticketId_'
+        Pick_UserEntity.Exclude_keyofUserEntity.userId__:
+            properties:
+                email:
+                    type: string
+                name:
+                    type: string
+                role:
+                    $ref: '#/components/schemas/UserRole'
+            required:
+                - email
+                - name
+                - role
+            type: object
+            description: 'From T, pick a set of properties whose keys are in the union K'
+        Omit_UserEntity.userId_:
+            $ref: '#/components/schemas/Pick_UserEntity.Exclude_keyofUserEntity.userId__'
+            description: 'Construct a type with the properties of T except for those in type K.'
+        UserCreateServiceInputData:
+            $ref: '#/components/schemas/Omit_UserEntity.userId_'
+    securitySchemes:
+        auth:
+            type: http
+            scheme: bearer
+info:
+    title: 'SIMPLE TICKET SYSTEM API'
+    version: '1'
+    description: 'specification file: /api/openapi.yaml'
+    license:
+        name: ISC
+    contact:
+        name: ishiyama
+        url: 'https://github.com/ishiyama0530'
+openapi: 3.0.0
+paths:
+    /auth/login:
+        post:
+            operationId: Login
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - auth
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                email:
+                                    type: string
+                            required:
+                                - email
+                            type: object
+    /auth/login/admin:
+        post:
+            operationId: LoginAdmin
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - auth
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                email:
+                                    type: string
+                            required:
+                                - email
+                            type: object
+    /auth/my:
+        get:
+            operationId: FindSessionUser
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserEntity'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - auth
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters: []
+    /tickets:
+        get:
+            operationId: FindTickets
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: '#/components/schemas/TicketDto'
+                                type: array
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - tickets
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters: []
+        post:
+            operationId: CreateTicket
+            responses:
+                '201':
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TicketDto'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - tickets
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TicketCreateServiceInputData'
+    '/tickets/{ticketId}':
+        get:
+            operationId: FindTicketByTicketId
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TicketDto'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - tickets
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters:
+                -
+                    in: path
+                    name: ticketId
+                    required: true
+                    schema:
+                        type: string
+        delete:
+            operationId: DeleteTicket
+            responses:
+                '204':
+                    description: Deleted
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - tickets
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters:
+                -
+                    in: path
+                    name: ticketId
+                    required: true
+                    schema:
+                        type: string
+    /users:
+        get:
+            operationId: FindUsers
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: '#/components/schemas/UserEntity'
+                                type: array
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - users
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters: []
+        post:
+            operationId: CreateUser
+            responses:
+                '201':
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserEntity'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - users
+            security:
+                -
+                    auth:
+                        - administrator
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserCreateServiceInputData'
+    '/users/{userId}':
+        get:
+            operationId: FindUserByUserId
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserEntity'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - users
+            security:
+                -
+                    auth:
+                        - member
+                        - administrator
+            parameters:
+                -
+                    in: path
+                    name: userId
+                    required: true
+                    schema:
+                        type: string
+        delete:
+            operationId: DeleteUser
+            responses:
+                '204':
+                    description: Deleted
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '404':
+                    description: 'Not found data'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error4xx'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error5xx'
+            tags:
+                - users
+            security:
+                -
+                    auth:
+                        - administrator
+            parameters:
+                -
+                    in: path
+                    name: userId
+                    required: true
+                    schema:
+                        type: string
+servers:
+    -
+        url: /api

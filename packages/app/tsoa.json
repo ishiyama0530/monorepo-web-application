@@ -1,0 +1,33 @@
+{
+  "entryFile": "app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*Controller.ts"],
+  "spec": {
+    "name": "SIMPLE TICKET SYSTEM API",
+    "version": "1",
+    "description": "specification file: /api/openapi.yaml",
+    "schemes": ["http"],
+    "contact": {
+      "name": "ishiyama",
+      "url": "https://github.com/ishiyama0530"
+    },
+    "specFileBaseName": "api.openapi",
+    "outputDirectory": "../specs",
+    "specVersion": 3,
+    "yaml": true,
+    "license": "ISC",
+    "basePath": "api",
+    "securityDefinitions": {
+      "auth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "src",
+    "basePath": "api",
+    "authenticationModule": "src/auth/TsoaAuthenticationModule.ts",
+    "iocModule": "src/dependency_injection/IocContainer"
+  }
+}

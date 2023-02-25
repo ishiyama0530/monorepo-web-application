@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll.eslint"],
+  "typescript.preferences.importModuleSpecifier": "project-relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  }
+}

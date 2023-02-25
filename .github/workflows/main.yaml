@@ -1,0 +1,48 @@
+name: Deploy to Cloud Run from Source
+
+on:
+  push:
+    branches: ['main']
+
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  REGION: ${{ secrets.REGION }}
+  REPOSITORY_ID: simple-ticket-system
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.13.0
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.26.3
+
+      - name: APP BUILD
+        run: |
+          pnpm install
+          pnpm run build_app
+
+      - name: APP IMAGE BUILD & PUSH
+        run: |
+          gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+          docker build -t ${{env.REGION}}-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY_ID}}/app:latest .
+          docker push ${{env.REGION}}-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY_ID}}/app:latest
+
+      - name: APP DEPLOY
+        run: |
+          gcloud run deploy simple-ticket-system-app \
+           --image=${{env.REGION}}-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY_ID}}/app \
+           --project=${{env.PROJECT_ID}} \
+           --region=${{env.REGION}} \
+           --allow-unauthenticated \
+           --platform managed
