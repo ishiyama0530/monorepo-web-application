@@ -1,9 +1,9 @@
 # monorepo-web-application
 
 こちらのリポジトリは単一リポジトリでシンプルなチケット管理システムを構築したものです。  
-使用した技術と設計に関する解説は下記にて行っています。  
-  
-[Web開発を単一リポジトリで設計する #モノレポ #モジュラーモノリス Express.js/React/Vue | Zenn](https://zenn.dev/articles/4718245cb66b47/edit)
+使用した技術と設計に関する解説は下記にて行っています。
+
+[Web 開発を単一リポジトリで設計する #モノレポ #モジュラーモノリス Express.js/React/Vue | Zenn](https://zenn.dev/ishiyama/articles/4718245cb66b47)
 
 ## 🔰 はじめかた
 
